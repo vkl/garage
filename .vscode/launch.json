@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Program MPLAB project",
+            "type": "mplab-core-da",
+            "request": "launch",
+            "noDebug": true
+        },
+        {
+            "name": "Launch garage: Release",
+            "type": "mplab-core-da",
+            "request": "launch",
+            "project": "garage",
+            "configuration": "Release",
+            "stopOnEntry": true,
+            "preLaunchTask": "garage: Release - Full Build",
+            "program": "c:\\Users\\vklad\\Projects\\garage\\garage\\out\\garage\\Release.elf"
+        },
+        {
+            "name": "Launch garage: Debug",
+            "type": "mplab-core-da",
+            "request": "launch",
+            "project": "garage",
+            "configuration": "Debug",
+            "stopOnEntry": true,
+            "preLaunchTask": "garage: Debug - Full Build",
+            "program": "c:\\Users\\vklad\\Projects\\garage\\garage\\out\\garage\\Debug.elf"
+        }
+    ]
+}

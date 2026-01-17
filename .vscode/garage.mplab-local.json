@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "reference": "Release",
+            "toolSerial": "J42700020037"
+        },
+        {
+            "reference": "Debug",
+            "toolSerial": "J42700020037"
+        }
+    ]
+}

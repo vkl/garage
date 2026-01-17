@@ -1,0 +1,113 @@
+{
+    "importedFrom": "garage\\garage.cproj",
+    "version": "1.8",
+    "configurations": [
+        {
+            "name": "Release",
+            "id": "",
+            "device": "ATmega328P",
+            "imageType": "application",
+            "imagePath": "./out/garage/Release.elf",
+            "toolProperties": "Release-tool-base",
+            "tool": "Atmel-ICE",
+            "packs": [
+                {
+                    "name": "ATmega_DFP",
+                    "vendor": "Microchip",
+                    "version": "3.4.282"
+                }
+            ],
+            "fileSet": "Release files",
+            "toolchain": "Release-AVR-GCC",
+            "userVariables": "Release-uservariables",
+            "preBuildSteps": [],
+            "postBuildSteps": []
+        },
+        {
+            "name": "Debug",
+            "id": "",
+            "device": "ATmega328P",
+            "imageType": "application",
+            "imagePath": "./out/garage/Debug.elf",
+            "toolProperties": "Debug-tool-base",
+            "tool": "Atmel-ICE",
+            "packs": [
+                {
+                    "name": "ATmega_DFP",
+                    "vendor": "Microchip",
+                    "version": "3.4.282"
+                }
+            ],
+            "fileSet": "Debug files",
+            "toolchain": "Debug-AVR-GCC",
+            "preBuildSteps": [],
+            "postBuildSteps": []
+        }
+    ],
+    "propertyGroups": [
+        {
+            "name": "Debug-uservariables",
+            "type": "uservariables",
+            "properties": {}
+        },
+        {
+            "name": "Release-uservariables",
+            "type": "uservariables",
+            "properties": {}
+        },
+        {
+            "name": "Debug-AVR-GCC",
+            "type": "toolchain",
+            "provider": "microchip.toolchains:avr-gcc@7.3.0",
+            "properties": {
+                "compiler.preprocessor-macros": [
+                    "DEBUG",
+                    "TRACE",
+                    "F_CPU=16000000UL"
+                ]
+            }
+        },
+        {
+            "name": "Release-AVR-GCC",
+            "type": "toolchain",
+            "provider": "microchip.toolchains:avr-gcc@7.3.0",
+            "properties": {
+                "compiler.optimization-level": "-O2",
+                "compiler.preprocessor-macros": [
+                    "F_CPU=16000000UL"
+                ],
+                "compiler.preprocessor-macros-undefined": [
+                    "DEBUG"
+                ]
+            }
+        },
+        {
+            "name": "Debug-tool-base",
+            "type": "tool",
+            "properties": {
+                "communication.interface": "dw"
+            }
+        },
+        {
+            "name": "Release-tool-base",
+            "type": "tool",
+            "properties": {}
+        }
+    ],
+    "fileSets": [
+        {
+            "name": "Release files",
+            "files": [
+                "garage/*{.c,.h}"
+            ],
+            "encoding": "utf-8"
+        },
+        {
+            "name": "Debug files",
+            "files": [
+                "garage/*{.c,.h}"
+            ],
+            "encoding": "utf-8"
+        }
+    ]
+}
