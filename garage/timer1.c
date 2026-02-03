@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -5,7 +6,7 @@
 static volatile uint32_t t1_ovf;
 static volatile uint16_t t1_start_cnt;
 static volatile uint16_t t1_stop_cnt;
-static volatile uint8_t is_ready = 0;
+static volatile bool is_ready = 0;
 
 ISR(TIMER1_OVF_vect)
 {

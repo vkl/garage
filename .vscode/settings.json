@@ -11,5 +11,6 @@
         "gdb",
         "mplab-core-da"
     ],
-    "cmake.sourceDirectory": "C:/Users/vklad/Projects/garage/garage/cmake/garage/Debug"
+    "cmake.sourceDirectory": "C:/Users/vklad/Projects/garage/garage/cmake/garage/Debug",
+    "mplab.project.workspace.addNewSourceFiles": "Never"
 }

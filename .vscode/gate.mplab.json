@@ -1,0 +1,86 @@
+{
+    "version": "1.8",
+    "configurations": [
+        {
+            "name": "Release",
+            "id": "conf1",
+            "device": "ATmega328P",
+            "imagePath": "./out/gate/gate.elf",
+            "packs": [
+                {
+                    "name": "ATmega_DFP",
+                    "vendor": "Microchip",
+                    "version": "3.5.296"
+                }
+            ],
+            "fileSet": "Release files",
+            "toolchain": "Release-AVR-GCC"
+        }
+    ],
+    "propertyGroups": [
+        {
+            "name": "Debug-uservariables",
+            "type": "uservariables",
+            "properties": {}
+        },
+        {
+            "name": "Release-uservariables",
+            "type": "uservariables",
+            "properties": {}
+        },
+        {
+            "name": "Debug-AVR-GCC",
+            "type": "toolchain",
+            "provider": "microchip.toolchains:avr-gcc@7.3.0",
+            "properties": {
+                "compiler.preprocessor-macros": [
+                    "DEBUG",
+                    "TRACE",
+                    "F_CPU=16000000UL"
+                ]
+            }
+        },
+        {
+            "name": "Release-AVR-GCC",
+            "type": "toolchain",
+            "provider": "microchip.toolchains:avr-gcc@7.3.0",
+            "properties": {
+                "compiler.optimization-level": "-O2",
+                "compiler.preprocessor-macros": [
+                    "F_CPU=16000000UL"
+                ],
+                "compiler.preprocessor-macros-undefined": [
+                    "DEBUG"
+                ]
+            }
+        },
+        {
+            "name": "Debug-tool-base",
+            "type": "tool",
+            "properties": {
+                "communication.interface": "dw"
+            }
+        },
+        {
+            "name": "Release-tool-base",
+            "type": "tool",
+            "properties": {}
+        }
+    ],
+    "fileSets": [
+        {
+            "name": "Release files",
+            "files": [
+                "gate/*{.c,.h}"
+            ],
+            "encoding": "utf-8"
+        },
+        {
+            "name": "Debug files",
+            "files": [
+                "gate/*{.c,.h}"
+            ],
+            "encoding": "utf-8"
+        }
+    ]
+}
