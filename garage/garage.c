@@ -4,7 +4,6 @@
  * Created: 11/15/2025 10:42:37 AM
  * Author : vklad
  */ 
-
  
 #include <avr/io.h>
 #include <util/delay.h>
@@ -29,8 +28,9 @@
 #define ECHO_PINR PINB
 #define ECHO_PIN  PINB0
 
-static void
-display(uint16_t d, uint16_t low_thrs, uint16_t high_thrs)
+static inline void
+display(const uint16_t d, const uint16_t low_thrs,
+    const uint16_t high_thrs)
 {
     uint8_t i, max;
 
@@ -60,9 +60,10 @@ display(uint16_t d, uint16_t low_thrs, uint16_t high_thrs)
             d, max, low_thrs, high_thrs);
 
     ws2812_refresh();
+
 }
 
-static void
+static inline void
 trig_10us(void)
 {
     TRIG_PORT &= ~(1<<TRIG_PIN);
@@ -74,11 +75,11 @@ trig_10us(void)
 }
 
 int
-main()
+main(void)
 {
     uint16_t d = 0;
-    uint16_t low_thrs = 0;
-    uint16_t high_thrs = 0;
+    uint16_t low_thrs;
+    uint16_t high_thrs;
     cli();
     ws2812_timer_init();
     timer1_init();
@@ -93,15 +94,15 @@ main()
 
     TRIG_DDR |= (1 << TRIG_PIN);
 
-    
-    while (1) 
-    {
-        low_thrs = adc_read_test();
+    for (;;) {
+        low_thrs = adc_read_ch0();
+        high_thrs = adc_read_ch1();
         trig_10us();
         d = timer1_get_distance();
-        display(d, 40, 100);
-        _delay_ms(50);
+        display(d, low_thrs, high_thrs);
+        _delay_ms(700);
     }
-    
+
+    return 0;
 }
 

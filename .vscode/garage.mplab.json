@@ -19,9 +19,7 @@
             ],
             "fileSet": "Release files",
             "toolchain": "Release-AVR-GCC",
-            "userVariables": "Release-uservariables",
-            "preBuildSteps": [],
-            "postBuildSteps": []
+            "userVariables": "Release-uservariables"
         },
         {
             "name": "Debug",
@@ -39,9 +37,7 @@
                 }
             ],
             "fileSet": "Debug files",
-            "toolchain": "Debug-AVR-GCC",
-            "preBuildSteps": [],
-            "postBuildSteps": []
+            "toolchain": "Debug-AVR-GCC"
         }
     ],
     "propertyGroups": [

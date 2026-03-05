@@ -1,6 +1,6 @@
 {
-    "C_Cpp.intelliSenseEngine": "disabled",
-    "C_Cpp.default.compilerPath": "",
+    "C_Cpp.intelliSenseEngine": "default",
+    "C_Cpp.default.compilerPath": "C:\\Users\\vklad\\.mplab\\app-finder\\apps\\avr-gcc\\v7.3.0\\avr8-gnu-toolchain-win32_x86_64\\bin\\avr-gcc.exe",
     "mplab.clangd.arguments": [
         "--compile-commands-dir=${workspaceFolder}\\_build\\garage\\Release"
     ],
@@ -12,5 +12,6 @@
         "mplab-core-da"
     ],
     "cmake.sourceDirectory": "C:/Users/vklad/Projects/garage/garage/cmake/garage/Debug",
-    "mplab.project.workspace.addNewSourceFiles": "Never"
+    "mplab.project.workspace.addNewSourceFiles": "Never",
+    "cmake.ignoreCMakeListsMissing": true
 }
