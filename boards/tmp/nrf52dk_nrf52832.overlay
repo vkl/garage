@@ -1,0 +1,12 @@
+/ {
+    aliases {
+        hc-sr04 = &hc_sr04_sensor;
+    };
+
+    hc_sr04_sensor: hc_sr04 {
+        compatible = "hc-sr04";
+        trigger-gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>;  /* P0.14 for TRIG */
+        echo-gpios = <&gpio0 19 GPIO_ACTIVE_HIGH>;     /* P0.19 for ECHO */
+        status = "okay";
+    };
+};

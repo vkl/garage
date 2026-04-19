@@ -1,2 +1,0 @@
-# garage
-Garage parking helper
