@@ -1,97 +1,79 @@
-.. zephyr:code-sample:: blinky
-   :name: Blinky
-   :relevant-api: gpio_interface
-
-   Blink an LED forever using the GPIO API.
+Garage Parking Helper
+==========================
 
 Overview
 ********
 
-The Blinky sample blinks an LED forever using the :ref:`GPIO API <gpio_api>`.
+A Zephyr-based garage parking helper system featuring Bluetooth connectivity, 
+ultrasonic distance sensing, and addressable RGB LED status indicators.
 
-The source code shows how to:
+The project includes:
 
-#. Get a pin specification from the :ref:`devicetree <dt-guide>` as a
-   :c:struct:`gpio_dt_spec`
-#. Configure the GPIO pin as an output
-#. Toggle the pin forever
+#. **Bluetooth Control**: BLE service for remote garage monitoring and control
+#. **Distance Sensing**: HC-SR04 ultrasonic sensor for detecting vehicle position
+#. **Visual Feedback**: WS2812 addressable LED strip (32 pixels) for status indication
+#. **Persistent Storage**: Non-Volatile Storage (NVS) for configuration parameters
+#. **Configurable Thresholds**: Adjustable distance thresholds for vehicle detection
 
-See :zephyr:code-sample:`pwm-blinky` for a similar sample that uses the PWM API instead.
+Features
+********
 
-.. _blinky-sample-requirements:
+- Bluetooth Low Energy (BLE) peripheral device named "GARAGE"
+- Real-time distance measurement via HC-SR04 sensor
+- Addressable RGB LED strip for visual status feedback
+- Flash-based configuration storage with NVS
+- System logging and debug capabilities
+- Configurable low/high threshold settings (stored in NVS)
 
-Requirements
-************
+Hardware Requirements
+*********************
 
-Your board must:
-
-#. Have an LED connected via a GPIO pin (these are called "User LEDs" on many of
-   Zephyr's :ref:`boards`).
-#. Have the LED configured using the ``led0`` devicetree alias.
+- **Board**: nRF52 series (e.g., nRF52 DK)
+- **Sensor**: HC-SR04 Ultrasonic Distance Sensor
+- **LED**: WS2812 addressable RGB LED strip
+- **Storage**: Flash partition for NVS configuration
 
 Building and Running
 ********************
 
-Build and flash Blinky as follows, changing ``reel_board`` for your board:
+Build the project for nRF52 board:
 
-.. zephyr-app-commands::
-   :zephyr-app: samples/basic/blinky
-   :board: reel_board
-   :goals: build flash
-   :compact:
+.. code-block:: bash
 
-After flashing, the LED starts to blink and messages with the current LED state
-are printed on the console. If a runtime error occurs, the sample exits without
-printing to the console.
+   west build -b nrf52dk_nrf52832
 
-Build errors
-************
+Flash to device:
 
-You will see a build error at the source code line defining the ``struct
-gpio_dt_spec led`` variable if you try to build Blinky for an unsupported
-board.
+.. code-block:: bash
 
-On GCC-based toolchains, the error looks like this:
+   west flash
 
-.. code-block:: none
+Project Structure
+*****************
 
-   error: '__device_dts_ord_DT_N_ALIAS_led_P_gpios_IDX_0_PH_ORD' undeclared here (not in a function)
+::
 
-Adding board support
-********************
+   src/
+   ├── main.c                 # Main application and sensor handling
+   ├── ws2812.c/h             # WS2812 LED strip control
+   └── services/
+       └── ble_service.c/h    # Bluetooth service implementation
 
-To add support for your board, add something like this to your devicetree:
+Key Components
+**************
 
-.. code-block:: DTS
+**HC-SR04 Sensor**: Measures distance to detect vehicle position
 
-   / {
-   	aliases {
-   		led0 = &myled0;
-   	};
+**WS2812 LED Strip**: Provides visual feedback with configurable colors based on distance to vehicle
 
-   	leds {
-   		compatible = "gpio-leds";
-   		myled0: led_0 {
-   			gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
-                };
-   	};
-   };
+**BLE Service**: Allows remote monitoring and control via Bluetooth peripheral
 
-The above sets your board's ``led0`` alias to use pin 13 on GPIO controller
-``gpio0``. The pin flags :c:macro:`GPIO_ACTIVE_HIGH` mean the LED is on when
-the pin is set to its high state, and off when the pin is in its low state.
+**Configuration**: Threshold values are stored in flash memory for persistence across reboots
 
-Tips:
+Bluetooth Service
+*****************
 
-- See :dtcompatible:`gpio-leds` for more information on defining GPIO-based LEDs
-  in devicetree.
+The device advertises as "GARAGE" and provides:
 
-- If you're not sure what to do, check the devicetrees for supported boards which
-  use the same SoC as your target. See :ref:`get-devicetree-outputs` for details.
-
-- See :zephyr_file:`include/zephyr/dt-bindings/gpio/gpio.h` for the flags you can use
-  in devicetree.
-
-- If the LED is built in to your board hardware, the alias should be defined in
-  your :ref:`BOARD.dts file <devicetree-in-out-files>`. Otherwise, you can
-  define one in a :ref:`devicetree overlay <set-devicetree-overlays>`.
+- Service UUID: d4864824-54b3-43a1-bc20-978fc376c275
+- RX Characteristic UUID: a6e8c460-7eaa-416b-95d4-9dcc084fcf6a
