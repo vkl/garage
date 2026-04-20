@@ -25,8 +25,6 @@
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main);
 
-#define SLEEP_TIME_MS   500
-
 #define RGB(led, _r, _g, _b) \
     do {                     \
         (led).r = (_r);     \
@@ -68,7 +66,8 @@ static void data_cb(const uint8_t *data, uint16_t len);
 static void error(void);
 static void init_cfg(void);
 static void write_cfg(void);
-// static void timer_init(void);
+static void worker(struct k_timer *timer_id);
+static void stop_worker(struct k_timer *timer_id);
 
 /******************************************************************************/
  
@@ -76,14 +75,16 @@ static struct config cfg;
 static struct k_sem ble_init_ok;
 static uint16_t cm;
 
-static volatile int16_t measure_timeout_cnt;
+struct k_timer measure_timer;
+struct k_timer measure_timeout_timer;
+K_TIMER_DEFINE(measure_timer, worker, NULL);
+K_TIMER_DEFINE(measure_timeout_timer, stop_worker, NULL);
 
 int
 main(void)
 {
     int err;
     cm = 500;
-    measure_timeout_cnt = 0;
 
     init_cfg();
 
@@ -93,8 +94,6 @@ main(void)
         LOG_ERR("Failed to initialize WS2812 PWM");
         error();
     }
-
-    LOG_INF("Starting main loop");
 
 	ble_service_register_callback(data_cb);
 	ble_service_register_sem(&ble_init_ok);
@@ -119,21 +118,6 @@ main(void)
         LOG_ERR("BLE initialization did not complete in time");
         error();
     }
-
-	while(1) {
-		k_sleep(DELAY_TIME);
-        if (measure_timeout_cnt > 0) {
-            measure_distance();
-            ws2812_pwm_update(display);
-            measure_timeout_cnt--;
-
-            if (measure_timeout_cnt <= 0) {
-                LOG_WRN("Measurement timeout reached, waiting for new data...");
-                k_sleep(K_MSEC(1000));
-                ws2812_clear();
-            }
-        }
-	}
 
     return 0;
 }
@@ -171,8 +155,8 @@ data_cb(const uint8_t *buffer, uint16_t len)
 		return;
 	}
 
-    measure_timeout_cnt = MEASURE_TIMEOUT_CNT;
-
+    k_timer_start(&measure_timer, K_MSEC(100), K_MSEC(100));
+    k_timer_start(&measure_timeout_timer, K_SECONDS(30), K_NO_WAIT);
 }
 
 static void
@@ -288,4 +272,20 @@ display(struct led_rgb *pixels, size_t count)
     }
 
     LOG_DBG("Updating LEDs: cm=%d, max=%d", cm, max);
+}
+
+void
+worker(struct k_timer *timer_id)
+{
+    measure_distance();
+    ws2812_pwm_update(display);
+}
+
+void
+stop_worker(struct k_timer *timer_id)
+{
+    k_timer_stop(&measure_timer);
+    LOG_WRN("Measurement timeout reached, waiting for new data...");
+    ws2812_clear();
+
 }
